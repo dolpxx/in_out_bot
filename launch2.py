@@ -10,38 +10,69 @@ intents.message_content = True
 
 client = Client(intents=intents)
 
-class Command:
-    def __init__(self):
-        self.is_bot_channel = (message.channel.name == "bot動作確認")
+w_data = dict()
 
-    def enum_members(message):
-        for guild in client.guilds:
-            for member in guild.members:
-                return (f"{member}")
-
-    def office_in(message):
+def office_in(message, ID):
+    if not ("in_flag" in w_data):
+        w_data[ID] = {"in_flag": True}
         today = datetime.datetime.now()
         hour, minute = today.hour, today.minute
-        write(message.author.id)
-        read()
+        add_in_count(ID)
+        set_in_time(ID, today)
+        update_json()
+        read_json()
+
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} in")
         else:
             return (f"<@{message.author.id}> {hour}:{minute} in")
+    else:
+        return ("多重inを検知しました!")
 
-w_data = dict()
-def write(ID):
-    with open('sample.json', mode='w') as f:
+def add_in_count(ID):
         if (ID in w_data):
-            w_data[ID] += 1
+            w_data[ID]["in_count"] += 1
         else:
-            w_data[ID] = 1
+            w_data[ID]["in_count"] = 1
 
+def set_in_time(ID, today):
+    t1 = int(datetime.datetime.timestamp(today))
+    w_data[ID]["in_time"] = t1
+
+
+def office_out(message, ID):
+    if ("in_flag" in w_data[ID]):
+        w_data[ID]["in_flag"] = False
+        today = datetime.datetime.now()
+        hour, minute = today.hour, today.minute
+        add_stay_time(ID, today)
+        update_json()
+        read_json()
+
+        if (minute < 10):
+            return (f"<@{message.author.id}> {hour}:0{minute} out")
+        else:
+            return (f"<@{message.author.id}> {hour}:{minute} out")
+    else:
+        return ("まだinしていません")
+
+
+
+def add_stay_time(ID, today):
+    t2 = int(datetime.datetime.timestamp(today))
+    if ("stay_time" in w_data[ID]):
+            w_data[ID]["stay_time"] += t2 - w_data[ID]["in_time"]
+    else:
+        w_data[ID]["stay_time"] = t2 - w_data[ID]["in_time"]
+
+        
+def update_json():
+    with open('sample.json', mode='w') as f:
         json.dump(w_data, f, indent=4)
         print('WRITE:')
         print(w_data)
 
-def read():
+def read_json():
     with open('sample.json', mode='r') as f:
         r_data = json.load(f)
         print('READ')
@@ -56,12 +87,11 @@ async def on_message(message):
 
     if (message.author == client.user):
         return
-        
-    if (message.content == "!member"):
-        await message.channel.send(Command.enum_members(message))
 
     if (message.content == "!in"):
-        await message.channel.send(Command.office_in(message))
+        await message.channel.send(office_in(message, message.author.id))
 
+    if (message.content == "!out"):
+        await message.channel.send(office_out(message, message.author.id))
 
 client.run(token)
