@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # 🤖 in_out_bot
 This bot has mainly two functions.
 
