@@ -7,23 +7,14 @@ token = "MTA3MjE0MTk2MjU0NDY5MzI1OA.GkqYf0.mBT5mQ-wP0gggIPGdWCn9yFJJS6LUYV9sQBrS
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
 
 client = discord.Client(intents=intents)
 
-
-class Command:
-    def __init__(self):
-        self.is_bot_channel = (message.channel.name == "bot動作確認")
-
-    # def enum_members(message):
-    #     for guild in client.guilds:
-    #         for member in guild.members:
-    #             yield (f"{member}")
-
-    def office_in(message):
-        today = datetime.datetime.now()
-        hour, minute = today.hour, today.minute
-        return (f"<@{message.author.id}> {hour}:{minute} in")
+def office_in(message):
+    today = datetime.datetime.now()
+    hour, minute = today.hour, today.minute
+    return (f"<@{message.author.id}> {hour}:{minute} in")
 
 @client.event
 async def on_ready():
@@ -34,15 +25,20 @@ async def on_ready():
 async def on_message(message):
 
     if (message.author == client.user):
-        print("0")
         return
 
-    if (message.content == "!member"):
-        print("1")
-        await message.channel.send(Command.enum_members(message))
+    if (message.content == "!in"):
+        await message.channel.send(office_in(message))
 
-    if (message.content == "in"):
-        print("2")
-        await message.channel.send(Command.office_in(message))
-
+    if (message.content == "!role"):
+        guild_id = 824630338692317244
+        guild = client.get_guild(guild_id)
+        role = guild.get_role(1040160934959783946)
+        await message.author.add_roles(role)
+        
+    if (message.content == "!unrole"):
+        guild_id = 824630338692317244
+        guild = client.get_guild(guild_id)
+        role = guild.get_role(1040160934959783946)
+        await message.author.remove_roles(role)
 client.run(token)

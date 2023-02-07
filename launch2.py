@@ -1,13 +1,15 @@
 import os
 import json
 import datetime
-from discord import Intents, Client, message
+from discord import Intents, Client, message, utils
 
 token = "MTA3MjE0MTk2MjU0NDY5MzI1OA.GkqYf0.mBT5mQ-wP0gggIPGdWCn9yFJJS6LUYV9sQBrS4"
 
 intents = Intents.default()
 intents.members = True
 intents.message_content = True
+intents.presences = True
+
 
 client = Client(intents=intents)
 
@@ -23,7 +25,6 @@ def office_in(message, ID):
         w_data[ID]["in_flag"] = True
         today = datetime.datetime.now()
         hour, minute = today.hour, today.minute
-        add_in_role(message, ID)
         add_in_count(ID)
         set_in_time(ID, today)
         update_json()
@@ -34,6 +35,13 @@ def office_in(message, ID):
             return (f"<@{message.author.id}> {hour}:{minute} in")
     else:
         return ("多重inを検知しました!")
+
+
+def add_in_role(message):
+    guild_id = 824630338692317244
+    guild = client.get_guild(guild_id)
+    role = guild.get_role(1040160934959783946)
+    return (message.author.add_roles(role))
 
 
 def add_in_count(ID):
@@ -69,7 +77,6 @@ def office_out(message, ID):
         hour, minute = today.hour, today.minute
         add_stay_time(ID, today)
         update_json()
-        read_json()
 
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} out")
@@ -79,27 +86,30 @@ def office_out(message, ID):
         return ("まだinしていません")
 
 
+def remove_in_role(message):
+    guild_id = 824630338692317244
+    guild = client.get_guild(guild_id)
+    role = guild.get_role(1040160934959783946)
+    return (message.author.remove_roles(role))
+
+
 def add_stay_time(ID, today):
     t2 = int(datetime.datetime.timestamp(today))
+    subtraction = t2 - w_data[ID]["in_time"]
     if ("stay_time" in w_data[ID]):
-        w_data[ID]["stay_time"] += t2 - w_data[ID]["in_time"]
+        w_data[ID]["stay_time"] += subtraction
     else:
-        w_data[ID]["stay_time"] = t2 - w_data[ID]["in_time"]
-
-def add_in_role(message, ID):
-    user = message.guild.get_member(ID)
-    ROLE_ID = 1040160934959783946
-    role = message.guild.get_role(ROLE_ID)
-    user.add_roles(role)
+        w_data[ID]["stay_time"] = subtraction
 
 
 @client.event
 async def on_ready():
+    print(f"Darkey が起動しました")
+
     def func():
         for guild in client.guilds:
             for member in guild.members:
                 yield member
-    print(f"Darkey が起動しました")
     for member in func():
         initialize(member.id)
     else:
@@ -119,8 +129,10 @@ async def on_message(message):
 
     if (message.content == "!in"):
         await message.channel.send(office_in(message, message.author.id))
+        await add_in_role(message)
 
     if (message.content == "!out"):
         await message.channel.send(office_out(message, message.author.id))
+        await remove_in_role(message)
 
 client.run(token)
