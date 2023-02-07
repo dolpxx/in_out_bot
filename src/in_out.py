@@ -2,8 +2,12 @@ import os
 import json
 import datetime
 from discord import Intents, Client
+from dotenv import load_dotenv
 
-token = "MTA3MjE0MTk2MjU0NDY5MzI1OA.GkqYf0.mBT5mQ-wP0gggIPGdWCn9yFJJS6LUYV9sQBrS4"
+load_dotenv()
+
+token = os.environ['BOT_TOKEN']
+print(token)
 
 intents = Intents.default()
 intents.members = True
