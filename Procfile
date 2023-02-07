@@ -1,1 +1,1 @@
-worker: python src/in_out.py
+worker: python in_out.py
