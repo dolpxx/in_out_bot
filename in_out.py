@@ -34,6 +34,7 @@ def office_in(message, ID):
         member_data[ID]["in_flag"] = True
         today = datetime.datetime.now()
         hour, minute = today.hour, today.minute
+        hour = (hour + 9) % 24
         add_in_count(ID)
         set_in_time(ID, today)
         update_json()
@@ -89,6 +90,7 @@ def office_out(message, ID):
         member_data[ID]["in_flag"] = False
         today = datetime.datetime.now()
         hour, minute = today.hour, today.minute
+        hour = (hour + 9) % 24
         add_stay_time(ID, today)
         update_json()
 
@@ -150,7 +152,7 @@ def enum(ID):
             if (info[1] > 0):
                 second = info[1] % 60
             result += (
-                f'**<@{member_ID}>**: **総in時間**: {day} 日 {hour} 時間 {minute} 分 {second} 秒, {i+1}位\n'
+                f'**<@{member_ID}> 総in時間**: {day} 日 {hour} 時間 {minute} 分 {second} 秒, **{i+1}位**\n'
             )
         return (result)
 
