@@ -177,8 +177,8 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
-    is_bot_channel = (message.channel.name == "bot動作確認") or (
-        message.channel.name == "対面活動報告")
+    is_bot_channel = ((message.channel.name == "bot動作確認") or (
+        message.channel.name == "対面活動報告"))
     if (is_bot_channel):
         if (message.author == client.user):
             return
