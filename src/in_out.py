@@ -43,6 +43,7 @@ def office_in(message, ID):
         add_in_count(ID)
         set_in_time(ID, today)
         update_json()
+        read_json()
 
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} in")
@@ -96,6 +97,7 @@ def office_out(message, ID):
         hour = (hour + 9) % 24
         add_stay_time(ID, today)
         update_json()
+        read_json()
 
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} out")
