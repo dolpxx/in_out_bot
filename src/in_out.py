@@ -128,7 +128,7 @@ def enum(ID):
     result = ""
     for member in func_members():
         ID = member.id
-        if (member_data[ID]["stay_time"] is not 0):
+        if not (member_data[ID]["stay_time"] == 0):
             temporary.append(([ID, member_data[ID]["stay_time"]]))
 
     if (temporary == []):
