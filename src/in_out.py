@@ -182,11 +182,11 @@ async def on_message(message):
         if (message.author == client.user):
             return
 
-        if (message.content.lower() in {"in", "いn", "un", "on", "im", "いｎ", "ｉｎ"}):
+        if (message.content.lower() in {"in", "いn", "un", "on", "im", "いｎ", "ｉｎ", "いん", "イン"}):
             await message.channel.send(office_in(message, message.author.id))
             await add_in_role(message)
 
-        if (message.content.lower() in {"out", "put", "iut", "おうt", "おうｔ", "our", "ｏｕｔ"}):
+        if (message.content.lower() in {"out", "put", "iut", "おうt", "おうｔ", "our", "ｏｕｔ", "あうと", "アウト"}):
             await message.channel.send(office_out(message, message.author.id))
             await remove_in_role(message)
 
