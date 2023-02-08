@@ -72,13 +72,15 @@ def update_json():
         json.dump(member_data, f, indent=4)
         print('updated:')
         print(member_data)
+    return (member_data)
 
 
 def read_json():
     with open('sample.json', mode='r') as f:
-        r_data = json.load(f)
+        read_data = json.load(f)
         print('read:')
-        print(r_data)
+        print(read_data)
+    return (read_data)
 
 
 def office_out(message, ID):
