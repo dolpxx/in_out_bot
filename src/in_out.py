@@ -180,14 +180,19 @@ async def on_message(message):
     is_bot_channel = (message.channel.name == "bot動作確認") 
     # or (message.channel.name == "対面活動報告"))
     if (is_bot_channel):
+        inlike_words = {"in", "いn", "un", "on", "im", 
+                        "いｎ", "ｉｎ", "いん", "イン"}
+
+        outlike_words = {"out", "put", "iut", "おうt",
+                         "おうｔ", "our", "ｏｕｔ", "あうと", "アウト"}
         if (message.author == client.user):
             return
 
-        if (message.content.lower() in {"in", "いn", "un", "on", "im", "いｎ", "ｉｎ", "いん", "イン"}):
+        if (message.content.lower() in inlike_words):
             await message.channel.send(office_in(message, message.author.id))
             await add_in_role(message)
 
-        if (message.content.lower() in {"out", "put", "iut", "おうt", "おうｔ", "our", "ｏｕｔ", "あうと", "アウト"}):
+        if (message.content.lower() in outlike_words):
             await message.channel.send(office_out(message, message.author.id))
             await remove_in_role(message)
 
