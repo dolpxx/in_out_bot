@@ -7,7 +7,8 @@ from discord import Intents, Client
 load_dotenv()
 
 token = os.environ["BOT_TOKEN"]
-print(token)
+guild_id = os.environ["GUILD_ID"]
+in_role_id = os.environ["IN_ROLE_ID"]
 
 intents = Intents.default()
 intents.members = True
@@ -53,9 +54,8 @@ def office_in(message, ID):
 
 
 def add_in_role(message):
-    guild_id = 824630338692317244
     guild = client.get_guild(guild_id)
-    role = guild.get_role(1040160934959783946)
+    role = guild.get_role(in_role_id)
     return (message.author.add_roles(role))
 
 
@@ -97,16 +97,16 @@ def office_out(message, ID):
         read_json()
 
         if (minute < 10):
-            return (f"<@{message.author.id}> {hour}:0{minute} out")
+            ret = (f"<@{message.author.id}> {hour}:0{minute} out")
         if (minute >= 10):
-            return (f"<@{message.author.id}> {hour}:{minute} out")
+            ret = (f"<@{message.author.id}> {hour}:{minute} out")
+        return (ret)
     return ("**多重outを検知しました!**")
 
 
 def remove_in_role(message):
-    guild_id = 824630338692317244
     guild = client.get_guild(guild_id)
-    role = guild.get_role(1040160934959783946)
+    role = guild.get_role(in_role_id)
     return (message.author.remove_roles(role))
 
 
@@ -119,7 +119,7 @@ def add_stay_time(ID, today):
 def func_members():
     for guild in client.guilds:
         for member in guild.members:
-            yield member
+            yield (member)
 
 
 def enum(ID):
