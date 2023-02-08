@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-token = os.environ['BOT_TOKEN']
+token = os.environ["BOT_TOKEN"]
 print(token)
 
 intents = Intents.default()
@@ -72,8 +72,6 @@ def update_json():
     with open("src/sample.json", 'w') as f:
         json.dump(member_data, f, indent=4)
         print('updated:')
-        print(member_data)
-    return (member_data)
 
 
 def read_json():
@@ -81,7 +79,6 @@ def read_json():
         read_data = json.load(f)
         print('read:')
         print(read_data)
-    return (read_data)
 
 
 def office_out(message, ID):
@@ -203,5 +200,11 @@ async def on_message(message):
 
         if (message.content.lower() == "get_my_data"):
             await message.channel.send(get_my_data(message.author.id))
+
+        if (message.content.lower() == "update_data"):
+            await update_json(member_data)
+
+        if (message.content.lower() == "read_data"):
+            await read_json(member_data)
 
 client.run(token)
