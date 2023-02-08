@@ -202,7 +202,4 @@ async def on_message(message):
         if (message.content.lower() == "get_my_data"):
             await message.channel.send(get_my_data(message.author.id))
 
-        if (message.content.lower() == "update_data"):
-            await update_json()
-
 client.run(token)
