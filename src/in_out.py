@@ -123,7 +123,7 @@ def func_members():
             yield member
 
 
-def enum(ID):
+def enum(ID):  
     update_json()
     temporary = []
     result = ""
@@ -167,6 +167,7 @@ async def on_ready():
     for member in func_members():
         initialize(member.id)
     update_json()
+    read_json()
 
 
 @client.event
