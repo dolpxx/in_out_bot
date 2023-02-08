@@ -139,12 +139,12 @@ def enum(ID):
         info = temporary[i]
         member_ID = info[0]
         day, hour, minute, second = 0, 0, 0, 0
-        if (info[1] > 86400 > 0):
+        if (info[1] > 86400):
             day = info[1] // 86400
         if (info[1] > 3600):
-            hour = info[1] // 3600
+            hour = (info[1] % 86400) // 3600
         if (info[1] > 60):
-            minute = info[1] // 60
+            minute = (info[1] % 3600) // 60
         if (info[1] >= 0):
             second = info[1] % 60
         result += (
@@ -180,18 +180,21 @@ async def on_message(message):
         if (message.author == client.user):
             return
 
-        if (message.content == "in"):
+        if (message.content.lower() in {"in", "いn", "un", "on", "im"}):
             await message.channel.send(office_in(message, message.author.id))
             await add_in_role(message)
 
-        if (message.content == "out"):
+        if (message.content.lower() in {"out", "put", "iut", "おうt", "our"}):
             await message.channel.send(office_out(message, message.author.id))
             await remove_in_role(message)
 
-        if (message.content == "enum"):
+        if (message.content.lower() == "enum"):
             await message.channel.send(enum(message.author.id))
 
-        if (message.content == "get_my_data"):
+        if (message.content.lower() == "get_my_data"):
             await message.channel.send(get_my_data(message.author.id))
+
+        if (message.content.lower() == "update_data"):
+            await update_json()
 
 client.run(token)
