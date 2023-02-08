@@ -68,7 +68,7 @@ def set_in_time(ID, today):
 
 
 def update_json():
-    with open('sample.json', mode='w') as f:
+    with open("src/sample.json", mode='w') as f:
         json.dump(member_data, f, indent=4)
         print('updated:')
         print(member_data)
@@ -76,7 +76,7 @@ def update_json():
 
 
 def read_json():
-    with open('sample.json', mode='r') as f:
+    with open("src/sample.json", mode='r') as f:
         read_data = json.load(f)
         print('read:')
         print(read_data)
