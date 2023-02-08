@@ -1,8 +1,8 @@
 import os
 import json
 import datetime
-from discord import Intents, Client
 from dotenv import load_dotenv
+from discord import Intents, Client
 
 load_dotenv()
 
