@@ -156,7 +156,7 @@ def enum(ID):
 
 
 def get_my_data(ID):
-    ret = (f"{ID}: {member_data[ID]}")
+    ret = (f"<@{ID}>: {member_data[ID]}")
     print(ret)
     return (ret)
 
