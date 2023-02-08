@@ -21,16 +21,21 @@ member_data = dict()
 
 
 def initialize(ID):
+    today = datetime.datetime.now()
     member_data[ID] = dict()
+    member_data[ID]["in_flag"] = False
+    member_data[ID]["in_count"] = 0
+    member_data[ID]["in_time"] = int(datetime.datetime.timestamp(today))
+    member_data[ID]["stay_time"] = 0
 
 
 def office_in(message, ID):
-    is_in = (
-        not ("in_flag" in member_data[ID]) or
-            (member_data[ID]["in_flag"] == False)
-    )
+    if (member_data[ID]["in_flag"] == False):
+        can_in = True
+    if (member_data[ID]["in_flag"] == True):
+        can_in = False
 
-    if (is_in):
+    if (can_in):
         member_data[ID]["in_flag"] = True
         today = datetime.datetime.now()
         hour, minute = today.hour, today.minute
@@ -41,10 +46,9 @@ def office_in(message, ID):
 
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} in")
-        else:
+        if (minute >= 10):
             return (f"<@{message.author.id}> {hour}:{minute} in")
-    else:
-        return ("**多重inを検知しました!**")
+    return ("**多重inを検知しました!**")
 
 
 def add_in_role(message):
@@ -55,10 +59,7 @@ def add_in_role(message):
 
 
 def add_in_count(ID):
-    if ("in_count" in member_data[ID]):
-        member_data[ID]["in_count"] += 1
-    else:
-        member_data[ID]["in_count"] = 1
+    member_data[ID]["in_count"] += 1
 
 
 def set_in_time(ID, today):
@@ -81,12 +82,12 @@ def read_json():
 
 
 def office_out(message, ID):
-    is_out = (
-        ("in_flag" in member_data[ID]) and
-        (member_data[ID]["in_flag"] == True)
-    )
+    if (member_data[ID]["in_flag"] == True):
+        can_out = True
+    if (member_data[ID]["in_flag"] == False):
+        can_out = False
 
-    if (is_out):
+    if (can_out):
         member_data[ID]["in_flag"] = False
         today = datetime.datetime.now()
         hour, minute = today.hour, today.minute
@@ -96,10 +97,9 @@ def office_out(message, ID):
 
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} out")
-        else:
+        if (minute >= 10):
             return (f"<@{message.author.id}> {hour}:{minute} out")
-    else:
-        return ("**まだinしていません!**")
+    return ("**多重outを検知しました!**")
 
 
 def remove_in_role(message):
@@ -112,10 +112,7 @@ def remove_in_role(message):
 def add_stay_time(ID, today):
     t2 = int(datetime.datetime.timestamp(today))
     subtraction = t2 - member_data[ID]["in_time"]
-    if ("stay_time" in member_data[ID]):
-        member_data[ID]["stay_time"] += subtraction
-    else:
-        member_data[ID]["stay_time"] = subtraction
+    member_data[ID]["stay_time"] += subtraction
 
 
 def func_members():
@@ -130,31 +127,30 @@ def enum(ID):
     result = ""
     for member in func_members():
         ID = member.id
-        if ("stay_time" in member_data[ID]):
+        if (member_data[ID]["stay_time"] is not 0):
             temporary.append(([ID, member_data[ID]["stay_time"]]))
-        else:
-            continue
 
     if (temporary == []):
         return ("**表示するデータがありません!**")
-    else:
-        temporary = sorted(temporary, reverse=True, key=lambda x: x[1])
-        for i in range(len(temporary)):
-            info = temporary[i]
-            member_ID = info[0]
-            day, hour, minute, second = 0, 0, 0, 0
-            if (info[1] > 86400 > 0):
-                day = info[1] // 86400
-            if (info[1] > 3600):
-                hour = info[1] // 3600
-            if (info[1] > 60):
-                minute = info[1] // 60
-            if (info[1] > 0):
-                second = info[1] % 60
-            result += (
-                f'**<@{member_ID}> 総in時間**: {day} 日 {hour} 時間 {minute} 分 {second} 秒, **{i+1}位**\n'
-            )
-        return (result)
+
+    temporary = sorted(temporary, reverse=True, key=lambda x: x[1])
+    member_count = len(temporary)
+    for i in range(member_count):
+        info = temporary[i]
+        member_ID = info[0]
+        day, hour, minute, second = 0, 0, 0, 0
+        if (info[1] > 86400 > 0):
+            day = info[1] // 86400
+        if (info[1] > 3600):
+            hour = info[1] // 3600
+        if (info[1] > 60):
+            minute = info[1] // 60
+        if (info[1] >= 0):
+            second = info[1] % 60
+        result += (
+            f'**<@{member_ID}> 総in時間**: {day} 日 {hour} 時間 {minute} 分 {second} 秒, **{i+1}位**\n'
+        )
+    return (result)
 
 
 @client.event
@@ -188,7 +184,5 @@ async def on_message(message):
 
         if (message.content == "enum"):
             await message.channel.send(enum(message.author.id))
-    else:
-        return
 
 client.run(token)
