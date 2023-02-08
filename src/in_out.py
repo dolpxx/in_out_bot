@@ -153,6 +153,12 @@ def enum(ID):
     return (result)
 
 
+def get_my_data(ID):
+    ret = (f"{ID}: {member_data[ID]}")
+    print(ret)
+    return (ret)
+
+
 @client.event
 async def on_ready():
     print(f"Darkey が起動しました")
@@ -184,5 +190,8 @@ async def on_message(message):
 
         if (message.content == "enum"):
             await message.channel.send(enum(message.author.id))
+
+        if (message.content == "get_my_data"):
+            await message.channel.send(get_my_data(message.author.id))
 
 client.run(token)
