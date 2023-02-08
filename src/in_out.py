@@ -123,7 +123,7 @@ def func_members():
             yield member
 
 
-def enum(ID):  
+def enum(ID):
     update_json()
     temporary = []
     result = ""
@@ -177,10 +177,10 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
-    is_bot_channel = (message.channel.name == "bot動作確認") 
+    is_bot_channel = (message.channel.name == "bot動作確認")
     # or (message.channel.name == "対面活動報告"))
     if (is_bot_channel):
-        inlike_words = {"in", "いn", "un", "on", "im", 
+        inlike_words = {"in", "いn", "un", "on", "im",
                         "いｎ", "ｉｎ", "いん", "イン"}
 
         outlike_words = {"out", "put", "iut", "おうt",
