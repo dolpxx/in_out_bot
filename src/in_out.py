@@ -22,7 +22,7 @@ client = Client(intents=intents)
 member_data = dict()
 
 
-def initialize(ID):
+def initialize_data(ID):
     member_data[ID] = dict()
     member_data[ID]["in_flag"] = False
     member_data[ID]["in_count"] = 0
@@ -178,13 +178,13 @@ def get_my_data(ID):
 async def on_ready():
     print(f"Darkey が起動しました")
     for member in func_members():
-        initialize(member.id)
+        initialize_data(member.id)
     update_json("src/sample.json")
 
 
 @client.event
 async def on_member_join(member):
-    initialize(member.id)
+    initialize_data(member.id)
 
 
 @client.event
