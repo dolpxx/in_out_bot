@@ -42,7 +42,7 @@ def office_in(message, ID):
         hour = (hour + 9) % 24
         add_in_count(ID)
         set_in_time(ID, today)
-        update_json()
+        update_json("src/sample.json")
 
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} in")
@@ -185,6 +185,8 @@ async def on_message(message):
         outlike_words = {"out", "put", "iut", "おうt",
                          "おうｔ", "our", "ｏｕｔ", "あうと", "アウト"}
 
+        enumlike_words = {"enum", "ｅｎｕｍ", "えぬm"}
+
         if (message.author == client.user):
             return
 
@@ -196,7 +198,7 @@ async def on_message(message):
             await message.channel.send(office_out(message, message.author.id))
             await remove_in_role(message)
 
-        if (message.content.lower() == "enum"):
+        if (message.content.lower() in enumlike_words):
             await message.channel.send(enum(message.author.id))
 
         if (message.content.lower() == "get_my_data"):
