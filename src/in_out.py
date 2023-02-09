@@ -43,7 +43,6 @@ def office_in(message, ID):
         add_in_count(ID)
         set_in_time(ID, today)
         update_json()
-        read_json()
 
         if (minute < 10):
             return (f"<@{message.author.id}> {hour}:0{minute} in")
@@ -67,15 +66,15 @@ def set_in_time(ID, today):
     member_data[ID]["in_time"] = t1
 
 
-def update_json():
-    with open("src/sample.json", 'w') as f:
+def update_json(path):
+    with open(path, 'w') as f:
         json.dump(member_data, f, indent=4)
         print("updated:")
-    return ("updated:")
+    return ("データを更新しました.")
 
 
-def read_json():
-    with open("src/sample.json", 'r') as f:
+def read_json(path):
+    with open(path, 'r') as f:
         read_data = json.load(f)
         print("read:")
     return (read_data)
@@ -204,9 +203,9 @@ async def on_message(message):
             await message.channel.send(get_my_data(message.author.id))
 
         if (message.content.lower() == "update_data"):
-            await update_json()
+            await update_json("src/sample.json")
 
         if (message.content.lower() == "read_data"):
-            await read_json()
+            await read_json("src/sample.json")
 
 client.run(token)
