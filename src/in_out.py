@@ -15,7 +15,6 @@ intents.members = True
 intents.message_content = True
 intents.presences = True
 
-
 client = Client(intents=intents)
 
 member_data = dict()
@@ -79,7 +78,6 @@ def read_json():
     with open("src/sample.json", 'r') as f:
         read_data = json.load(f)
         print("read:")
-        print(read_data)
     return (read_data)
 
 
@@ -181,11 +179,13 @@ async def on_message(message):
     is_bot_channel = (message.channel.name == "bot動作確認")
     # or (message.channel.name == "対面活動報告"))
     if (is_bot_channel):
+
         inlike_words = {"in", "いn", "un", "on", "im",
                         "いｎ", "ｉｎ", "いん", "イン"}
 
         outlike_words = {"out", "put", "iut", "おうt",
                          "おうｔ", "our", "ｏｕｔ", "あうと", "アウト"}
+
         if (message.author == client.user):
             return
 
@@ -204,9 +204,9 @@ async def on_message(message):
             await message.channel.send(get_my_data(message.author.id))
 
         if (message.content.lower() == "update_data"):
-            await update_json(member_data)
+            await update_json()
 
         if (message.content.lower() == "read_data"):
-            await read_json(member_data)
+            await read_json()
 
 client.run(token)
