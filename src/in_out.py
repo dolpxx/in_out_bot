@@ -7,8 +7,8 @@ from discord import Intents, Client
 load_dotenv()
 
 token = os.environ["BOT_TOKEN"]
-guild_id = os.environ["GUILD_ID"]
-in_role_id = os.environ["IN_ROLE_ID"]
+guild_id = int(os.environ["GUILD_ID"])
+role_id = int(os.environ["IN_ROLE_ID"])
 
 intents = Intents.default()
 intents.members = True
@@ -55,7 +55,7 @@ def office_in(message, ID):
 
 def add_in_role(message):
     guild = client.get_guild(guild_id)
-    role = guild.get_role(in_role_id)
+    role = guild.get_role(role_id)
     return (message.author.add_roles(role))
 
 
@@ -71,14 +71,16 @@ def set_in_time(ID, today):
 def update_json():
     with open("src/sample.json", 'w') as f:
         json.dump(member_data, f, indent=4)
-        print('updated:')
+        print("updated:")
+    return ("updated:")
 
 
 def read_json():
     with open("src/sample.json", 'r') as f:
         read_data = json.load(f)
-        print('read:')
+        print("read:")
         print(read_data)
+    return (read_data)
 
 
 def office_out(message, ID):
@@ -106,7 +108,7 @@ def office_out(message, ID):
 
 def remove_in_role(message):
     guild = client.get_guild(guild_id)
-    role = guild.get_role(in_role_id)
+    role = guild.get_role(role_id)
     return (message.author.remove_roles(role))
 
 
