@@ -9,7 +9,7 @@ def write():
         w_data['array'] = []
         w_data['array'].append(1)
         w_data['array'].append(2)
-        w_data['array'].append(3)
+        w_data['array'].append(2048)
 
         json.dump(w_data, f, indent=2)
         print('WRITE:')
@@ -23,7 +23,7 @@ def read():
         print(r_data)
 
 
-if __name__ == '__main__':
+if (__name__ == '__main__'):
     write()
     read()
 
