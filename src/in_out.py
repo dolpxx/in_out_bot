@@ -23,11 +23,10 @@ member_data = dict()
 
 
 def initialize(ID):
-    today = datetime.datetime.now()
     member_data[ID] = dict()
     member_data[ID]["in_flag"] = False
     member_data[ID]["in_count"] = 0
-    member_data[ID]["in_time"] = int(datetime.datetime.timestamp(today))
+    member_data[ID]["in_time"] = 0
     member_data[ID]["stay_time"] = 0
 
 
