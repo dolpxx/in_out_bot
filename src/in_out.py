@@ -9,6 +9,8 @@ load_dotenv()
 token = os.environ["BOT_TOKEN"]
 guild_id = int(os.environ["GUILD_ID"])
 role_id = int(os.environ["IN_ROLE_ID"])
+bot_channel_id = int(os.environ["BOT_CHANNEL_ID"])
+attendance_channel_id = int(os.environ["ATTENDANCE_CHANNEL_ID"])
 
 intents = Intents.default()
 intents.members = True
@@ -92,8 +94,7 @@ def office_out(message, ID):
         hour, minute = today.hour, today.minute
         hour = (hour + 9) % 24
         add_stay_time(ID, today)
-        update_json()
-        read_json()
+        update_json("src/sample.json")
 
         if (minute < 10):
             ret = (f"<@{message.author.id}> {hour}:0{minute} out")
@@ -121,10 +122,30 @@ def func_members():
             yield (member)
 
 
+def second_to_time(sec):
+    result = []
+    day, hour, minute, second = 0, 0, 0, 0
+    if (sec > 86400):
+        day = sec // 86400
+    if (sec > 3600):
+        hour = (sec % 86400) // 3600
+    if (sec > 60):
+        minute = (sec % 3600) // 60
+    if (sec >= 0):
+        second = sec % 60
+
+    result.append(day)
+    result.append(hour)
+    result.append(minute)
+    result.append(second)
+
+    return (result)
+
+
 def enum(ID):
-    update_json()
+    update_json("src/sample.json")
     temporary = []
-    result = ""
+    result = []
     for member in func_members():
         ID = member.id
         if not (member_data[ID]["stay_time"] == 0):
@@ -138,23 +159,18 @@ def enum(ID):
     for i in range(member_count):
         info = temporary[i]
         member_ID = info[0]
-        day, hour, minute, second = 0, 0, 0, 0
-        if (info[1] > 86400):
-            day = info[1] // 86400
-        if (info[1] > 3600):
-            hour = (info[1] % 86400) // 3600
-        if (info[1] > 60):
-            minute = (info[1] % 3600) // 60
-        if (info[1] >= 0):
-            second = info[1] % 60
-        result += (
-            f'**<@{member_ID}> 総in時間**: {day} 日 {hour} 時間 {minute} 分 {second} 秒, **{i+1}位**\n'
+        time = second_to_time(info[1])
+
+        day, hour, minute, second = time
+        result.append(
+            f'**<@{member_ID}> 総in時間**: **{day}** 日 **{hour}** 時間 **{minute}** 分 **{second}** 秒, **{i+1}位**\n'
         )
+        result = "".join(result)
     return (result)
 
 
 def get_my_data(ID):
-    ret = (f"<@{ID}>: {member_data[ID]}")
+    ret = (f"<@{ID}> {member_data[ID]}")
     print(ret)
     return (ret)
 
@@ -174,7 +190,7 @@ async def on_member_join(member):
 
 @client.event
 async def on_message(message):
-    is_bot_channel = (message.channel.name == "bot動作確認")
+    is_bot_channel = (message.channel.id == bot_channel_id)
     # or (message.channel.name == "対面活動報告"))
     if (is_bot_channel):
 
@@ -204,9 +220,11 @@ async def on_message(message):
             await message.channel.send(get_my_data(message.author.id))
 
         if (message.content.lower() == "update_data"):
-            update_json("src/sample.json")
+            if (message.channel.id == bot_channel_id):
+                await message.channel.send(update_json("src/sample.json"))
 
         if (message.content.lower() == "read_data"):
-            read_json("src/sample.json")
+            if (message.channel.id == bot_channel_id):
+                read_json("src/sample.json")
 
 client.run(token)
