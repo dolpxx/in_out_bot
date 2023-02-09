@@ -164,8 +164,7 @@ async def on_ready():
     print(f"Darkey が起動しました")
     for member in func_members():
         initialize(member.id)
-    update_json()
-    read_json()
+    update_json("src/sample.json")
 
 
 @client.event
