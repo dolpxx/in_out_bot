@@ -222,8 +222,4 @@ async def on_message(message):
             if (message.channel.id == bot_channel_id):
                 await message.channel.send(update_json("src/sample.json"))
 
-        if (message.content.lower() == "read_data"):
-            if (message.channel.id == bot_channel_id):
-                read_json("src/sample.json")
-
 client.run(token)
