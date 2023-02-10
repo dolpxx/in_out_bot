@@ -162,7 +162,7 @@ def enum(ID):
 
         day, hour, minute, second = time
         result.append(
-            f"**<@{member_ID}> 総in時間**: **{day}** 日 **{hour}** 時間 **{minute}** 分 **{second}** 秒, **{i+1}位**\n"
+            f"**<@{member_ID}> 総in時間**: **{day}** 日 **{hour}** 時間 **{minute}** 分 **{second}** 秒, **{i+1} 位**\n"
         )
         result = "".join(result)
     return (result)
