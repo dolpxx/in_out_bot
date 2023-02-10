@@ -70,7 +70,7 @@ def set_in_time(ID, today):
 def update_json(path):
     with open(path, 'w') as f:
         json.dump(member_data, f, indent=4)
-        print("updated:")
+        print("updated:", path, datetime.datetime.now())
     return ("データを更新しました.")
 
 
@@ -162,7 +162,7 @@ def enum(ID):
 
         day, hour, minute, second = time
         result.append(
-            f'**<@{member_ID}> 総in時間**: **{day}** 日 **{hour}** 時間 **{minute}** 分 **{second}** 秒, **{i+1}位**\n'
+            f"**<@{member_ID}> 総in時間**: **{day}** 日 **{hour}** 時間 **{minute}** 分 **{second}** 秒, **{i+1}位**\n"
         )
         result = "".join(result)
     return (result)
@@ -193,13 +193,13 @@ async def on_message(message):
     is_attendance_channel = (message.channel.id == attendance_channel_id)
     if (is_bot_channel):
 
-        inlike_words = {"in", "いn", "un", "on", "im",
-                        "いｎ", "ｉｎ", "いん", "イン"}
+        inlike_words = {"in", "いn", "un", "on", "im", "inn",
+                        "いｎ", "ｉｎ", "いん", "イン", "ｲﾝ", "ｉｎｎ"}
 
-        outlike_words = {"out", "put", "iut", "おうt",
-                         "おうｔ", "our", "ｏｕｔ", "あうと", "アウト"}
+        outlike_words = {"out", "put", "iut", "おうt", "auto", "ａｕｔｏ",
+                         "おうｔ", "our", "ｏｕｔ", "あうと", "アウト", "ｱｳﾄ"}
 
-        enumlike_words = {"enum", "ｅｎｕｍ", "えぬm"}
+        enumlike_words = {"enum", "ｅｎｕｍ", "えぬm", "えぬｍ"}
 
         if (message.author.bot):
             return
