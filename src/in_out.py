@@ -190,7 +190,7 @@ async def on_member_join(member):
 @client.event
 async def on_message(message):
     is_bot_channel = (message.channel.id == bot_channel_id)
-    # or (message.channel.name == "対面活動報告"))
+    # is_attendance_channel = ((message.channel.id == attendance_channel_id)
     if (is_bot_channel):
 
         inlike_words = {"in", "いn", "un", "on", "im",
