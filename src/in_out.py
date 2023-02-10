@@ -49,7 +49,7 @@ def office_in(message, ID):
             return (f"<@{message.author.id}> {hour}:0{minute} in")
         if (minute >= 10):
             return (f"<@{message.author.id}> {hour}:{minute} in")
-    return ("**多重inを検知しました:(**")
+    return ("**多重inを検知しました!**")
 
 
 def add_in_role(message):
