@@ -70,7 +70,8 @@ def set_in_time(ID, today):
 def update_json(path):
     with open(path, 'w') as f:
         json.dump(member_data, f, indent=4)
-        print("updated:", path, datetime.datetime.now())
+        print("updated:", path, datetime.datetime.utcnow() +
+              datetime.timedelta(hours=9))
     return ("データを更新しました.")
 
 
