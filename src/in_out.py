@@ -201,7 +201,7 @@ async def on_message(message):
 
         enumlike_words = {"enum", "ｅｎｕｍ", "えぬm"}
 
-        if (message.author == client.user):
+        if (message.author.bot):
             return
 
         if (message.content.lower() in inlike_words):
