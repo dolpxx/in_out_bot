@@ -199,7 +199,7 @@ async def on_message(message):
                      "おうｔ", "our", "ｏｕｔ", "あうと", "アウト", "ｱｳﾄ"}
     enumlike_words = {"enum", "ｅｎｕｍ", "えぬm", "えぬｍ"}
 
-    if (is_bot_channel) or (is_attendance_channel):
+    if (is_bot_channel):
 
         if (message.author.bot):
             return
